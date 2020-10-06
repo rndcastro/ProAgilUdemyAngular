@@ -1,7 +1,37 @@
-<p>
-  eventos works!
-</p>
-
-<div *ngFor="let evento of eventos" >
-  Tema: {{evento.tema}}   Local:  {{evento.local}}
-</div>
+<form class="form-inline">
+  <div class="form-group mb-2">
+    <input type="text" class="form-control mr-2" placeholder="local">
+    <button class="btn btn-outline-sucecess">buscar</button>
+  </div>
+</form>
+<table class="table table-striped">
+  <thead class="tehead-dark">
+    <tr>
+      <th>#</th>
+      <th>Imagem</th>
+      <th>Tema</th>
+      <th>Local</th>
+      <th>Data</th>
+      <th>Qtd Pessoas</th>
+      <th>Lote</th>
+      <th>Opções</th>
+    </tr>
+  </thead>
+  <tbody *ngIf = "eventos && eventos.length">
+    <tr *ngFor="let evento of eventos" >
+      <td>{{evento.eventoId}}</td>
+      <td>{{evento.eventoId}}</td>
+      <td>{{evento.tema}}</td>
+      <td>{{evento.local}}</td>
+      <td>{{evento.dataEvento}}</td>
+      <td>{{evento.quantidadePessoas}}</td>
+      <td>{{evento.lote}}</td>
+      <td>-</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan = "7" *ngIf = "!eventos || !eventos.length"> 
+      <h5>Nenhum evento encontrado.</h5>
+    </td>
+  </tfoot>
+</table>
