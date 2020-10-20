@@ -1,14 +1,23 @@
-<form class="form-inline">
+<div class="form-inline">
   <div class="form-group mb-2">
-    <input type="text" class="form-control mr-2" placeholder="local">
-    <button class="btn btn-outline-sucecess">buscar</button>
+    <input type="text" 
+    class="form-control mr-2" 
+    placeholder="buscar"
+    [(ngModel)]="FilterList"
+    >
+    <button class="btn btn-outline-success">buscar</button>
   </div>
-</form>
+</div>
+<h5>Filtro: {{FilterList }}</h5>
 <table class="table table-striped">
   <thead class="tehead-dark">
     <tr>
+      <th>
+        <button class="btn btn-outline-primary" (click)="toggleImage()">
+          <i class="{{showImage? 'fa fa-eye-slash': 'fa fa-eye' }}"></i>
+        </button>
+      </th>
       <th>#</th>
-      <th>Imagem</th>
       <th>Tema</th>
       <th>Local</th>
       <th>Data</th>
@@ -17,21 +26,54 @@
       <th>Opções</th>
     </tr>
   </thead>
-  <tbody *ngIf = "eventos && eventos.length">
-    <tr *ngFor="let evento of eventos" >
-      <td>{{evento.eventoId}}</td>
-      <td>{{evento.eventoId}}</td>
-      <td>{{evento.tema}}</td>
-      <td>{{evento.local}}</td>
-      <td>{{evento.dataEvento}}</td>
-      <td>{{evento.quantidadePessoas}}</td>
-      <td>{{evento.lote}}</td>
-      <td>-</td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <td colspan = "7" *ngIf = "!eventos || !eventos.length"> 
-      <h5>Nenhum evento encontrado.</h5>
-    </td>
-  </tfoot>
-</table>
+  <tbody *ngIf = "eventsFiltered && eventsFiltered.length">
+    <tr *ngFor="let event of eventsFiltered" >
+      <td> 
+        <img *ngIf = "showImage"
+        src="http://localhost:5000/img/{{event.imagemURL}}"
+        [style.width.px] = "imageWidth" 
+        [style.height.px] = "imageHeight"
+        > 
+      </td>
+      <td>{{event.id}}</td>
+      <td>{{event.tema}}</td>
+      <td>{{event.local}}</td>
+      <td>{{event.dataEvento | DateTimeFormat }}</td>
+      <td>{{event.quantidadePessoas}}</td>
+      <td>
+        <div *ngIf="!event.lotes.length"> Não informado</div>
+        <div *ngIf="event.lotes.length">{{event.lotes[0].nome}}</div>
+      </td>
+        <td>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-success" tooltip="Editar" (click)="openModal(modalTemplate)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" tooltip="Apagar">
+              <i class="fa fa-eraser"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <td colspan = "7" *ngIf = "!eventsFiltered || !eventsFiltered.length"> 
+        <h5>Nenhum evento encontrado.</h5>
+      </td>
+    </tfoot>
+  </table>
+
+  <ng-template #modalTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title pull-right">Modal</h4>
+      <button 
+        type="button"
+        class="close pull-left"
+        arial-label="Close"
+        (click)="modalRef.hide()">
+        <span>&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">This is a Modal</div>
+  </ng-template>
+  
